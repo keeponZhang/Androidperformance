@@ -59,7 +59,11 @@ public class DispatchRunnable implements Runnable {
                 mTaskDispatcher.satisfyChildren(mTask);
                 mTaskDispatcher.markTaskDone(mTask);
             }
-            DispatcherLog.i(mTask.getClass().getSimpleName() + " finish");
+            String needWait = "";
+            if(mTask.needWait()){
+                needWait =" onCreate 前需要完成 "+ mTask.getClass().getSimpleName();
+            }
+            DispatcherLog.i(mTask.getClass().getSimpleName() + " finish"+needWait);
         }
         TraceCompat.endSection();
     }

@@ -70,8 +70,10 @@ public class TaskDispatcher {
             collectDepends(task);
             mAllTasks.add(task);
             mClsAllTasks.add(task.getClass());
+            boolean ifNeedWait = ifNeedWait(task);
+            Log.e("TAG", "TaskDispatcher addTask:" + ifNeedWait+ " task="+task.getClass().getSimpleName());
             // 非主线程且需要wait的，主线程不需要CountDownLatch也是同步的
-            if (ifNeedWait(task)) {
+            if (ifNeedWait) {
                 mNeedWaitTasks.add(task);
                 mNeedWaitCount.getAndIncrement();
             }
@@ -94,6 +96,7 @@ public class TaskDispatcher {
     }
 
     private boolean ifNeedWait(Task task) {
+        //不是运行在主线程且需要等待
         return !task.runOnMainThread() && task.needWait();
     }
 
@@ -219,9 +222,9 @@ public class TaskDispatcher {
     public void await() {
         try {
             if (DispatcherLog.isDebug()) {
-                DispatcherLog.i("still has " + mNeedWaitCount.get());
+                DispatcherLog.i("still await has " + mNeedWaitCount.get());
                 for (Task task : mNeedWaitTasks) {
-                    DispatcherLog.i("needWait: " + task.getClass().getSimpleName());
+                    DispatcherLog.i("需要等待needWait: " + task.getClass().getSimpleName());
                 }
             }
 

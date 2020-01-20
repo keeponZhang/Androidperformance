@@ -21,6 +21,7 @@ import com.facebook.stetho.Stetho;
 import com.github.anrwatchdog.ANRWatchDog;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.optimize.performance.adapter.NewsAdapter;
+import com.optimize.performance.aop.BehaviorTrace;
 import com.optimize.performance.bean.NewsItem;
 import com.optimize.performance.block.AppBlockCanaryContext;
 import com.optimize.performance.launchstarter.TaskDispatcher;
@@ -124,23 +125,11 @@ public class PerformanceApp extends Application {
         LaunchTimer.startRecord();
         mApplication = this;
 
-        // TaskDispatcher.init(PerformanceApp.this);
-        //
-        // TaskDispatcher dispatcher = TaskDispatcher.createInstance();
-        //
-        // dispatcher.addTask(new InitAMapTask())
-        //         .addTask(new InitStethoTask())
-        //         .addTask(new InitWeexTask())
-        //         .addTask(new InitBuglyTask())
-        //         .addTask(new InitFrescoTask())
-        //         .addTask(new InitJPushTask())
-        //         .addTask(new InitUmengTask())
-        //         .addTask(new GetDeviceIdTask())
-        //         .start();
-        //
-        // dispatcher.await();
+        startTask();
 
-        LaunchTimer.endRecord();
+
+
+        LaunchTimer.endRecord("Oncreate finish task "+getProcessName()+" ");
         //
         // DexposedBridge.hookAllConstructors(ImageView.class, new XC_MethodHook() {
         //     @Override
@@ -167,11 +156,41 @@ public class PerformanceApp extends Application {
 
 //        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
-        initStrictMode();
-        initFresco();
-        initJPush();
-
+        // initStrictMode();
 //        new ANRWatchDog().start();
+    }
+
+    private void startTask() {
+        if(true){
+            TaskDispatcher.init(PerformanceApp.this);
+            TaskDispatcher dispatcher = TaskDispatcher.createInstance();
+            dispatcher.addTask(new InitAMapTask())
+                    .addTask(new InitStethoTask())
+                    .addTask(new InitWeexTask())
+                    .addTask(new InitBuglyTask())
+                    .addTask(new InitFrescoTask())
+                    // .addTask(new InitJPushTask())
+                    .addTask(new InitUmengTask())
+                    .addTask(new GetDeviceIdTask())
+                    .start();
+            dispatcher.await();
+        }else{
+            initDeviceId();
+            initAMap();
+            initStetho();
+            initWeex();
+            initBugly();
+            initFresco();
+            initUmeng();
+        }
+
+    }
+
+    private void initDeviceId() {
+        // 真正自己的代码
+        TelephonyManager tManager = (TelephonyManager)getSystemService(
+                Context.TELEPHONY_SERVICE);
+        mDeviceId = tManager.getDeviceId();
     }
 
     private void initStrictMode() {
@@ -202,8 +221,8 @@ public class PerformanceApp extends Application {
         InitConfig config = new InitConfig.Builder().build();
         WXSDKEngine.initialize(this, config);
     }
-
-    private void initJPush() {
+    @BehaviorTrace("测试aspect")
+    public void initJPush() {
         JPushInterface.init(this);
         JPushInterface.setAlias(this, 0, mDeviceId);
     }

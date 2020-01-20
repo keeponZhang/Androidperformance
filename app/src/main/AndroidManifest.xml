@@ -55,10 +55,10 @@
 
         <service android:name="com.amap.api.location.APSService"></service>
 
-        <service android:name="cn.jpush.android.service.PushService"
-            android:process=":multiprocess"
-            tools:node="replace" >
-        </service>
+<!--        <service android:name="cn.jpush.android.service.PushService"-->
+<!--            android:process=":multiprocess"-->
+<!--            tools:node="replace" >-->
+<!--        </service>-->
 
         <provider
             android:authorities="com.optimize.performance.DataProvider"

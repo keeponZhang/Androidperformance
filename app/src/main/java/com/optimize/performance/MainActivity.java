@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements OnFeedShowCallBac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Log.e("TAG", "task MainActivity onCreate:");
         // 以下代码是为了演示修改任务的名称
         ThreadPoolUtils.getService().execute(new Runnable() {
             @Override

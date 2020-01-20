@@ -26,12 +26,11 @@ public class PerformanceAop {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        LogUtils.i(name + "PerformanceAop getTime cost " + (System.currentTimeMillis() - time));
+        // LogUtils.i(name + "PerformanceAop getTime cost " + (System.currentTimeMillis() - time));
     }
 
-    // @Pointcut("execution (* com.optimize.performance.PerformanceApp.initJPush(..))")
+    // @Pointcut("@annotation(com.optimize.performance.aop.BehaviorTrace)")
     // public void pointcut() {
-    //     Log.e("TAG", "PerformanceAop TestAnnoAspect pointcut:");
     // }
     //
     // @Before("pointcut()")
@@ -47,7 +46,6 @@ public class PerformanceAop {
     //     } catch (Throwable throwable) {
     //         throwable.printStackTrace();
     //     }
-    //
     // }
     //
     //
@@ -71,7 +69,7 @@ public class PerformanceAop {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        LogUtils.i(name + " cost " + (System.currentTimeMillis() - time));
+        // LogUtils.i(name + " cost " + (System.currentTimeMillis() - time));
     }
 
 

@@ -77,11 +77,11 @@ public class TaskSortUtil {
     }
 
     private static void printAllTaskName(List<Task> newTasksAll) {
-        if (true) {
-            return;
-        }
+        // if (true) {
+        //     return;
+        // }
         for (Task task : newTasksAll) {
-            DispatcherLog.i(task.getClass().getSimpleName());
+            DispatcherLog.i("排序task "+task.getClass().getSimpleName());
         }
     }
 
