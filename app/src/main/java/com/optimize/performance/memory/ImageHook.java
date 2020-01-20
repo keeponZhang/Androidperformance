@@ -17,8 +17,9 @@ public class ImageHook extends XC_MethodHook {
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         super.afterHookedMethod(param);
         // 实现我们的逻辑
+        Log.e("TAG", "ImageHook afterHookedMethod:");
         ImageView imageView = (ImageView) param.thisObject;
-        checkBitmap(imageView,((ImageView) param.thisObject).getDrawable());
+        checkBitmap(imageView,imageView.getDrawable());
     }
 
 
@@ -65,7 +66,7 @@ public class ImageHook extends XC_MethodHook {
                 .append("\n call stack trace: \n").append(Log.getStackTraceString(t)).append('\n')
                 .toString();
 
-        LogUtils.i(warnInfo);
+        LogUtils.i(" image hook 警告 "+warnInfo);
     }
 
 }

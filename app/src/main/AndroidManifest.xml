@@ -38,6 +38,16 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
             android:theme="@style/Theme.Splash">
+
+        </activity>
+
+        <activity android:name=".TestBlankActivity"/>
+
+        <activity android:name=".memory.MemoryShakeActivity">
+
+        </activity>
+
+        <activity android:name=".memory.MemoryLeakActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,13 +55,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".TestBlankActivity"/>
-
-        <activity android:name=".memory.MemoryShakeActivity"/>
-
-        <activity android:name=".memory.MemoryLeakActivity"/>
-
-        <activity android:name=".ui.SolveOverDrawActivity"/>
+        <activity android:name=".ui.SolveOverDrawActivity"></activity>
 
         <service android:name="com.amap.api.location.APSService"></service>
 

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.optimize.performance.R;
@@ -20,11 +21,12 @@ public class MemoryShakeActivity extends AppCompatActivity implements View.OnCli
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Log.e("TAG", "MemoryShakeActivity handleMessage:");
             // 创造内存抖动
-            for (int index = 0; index <= 100; index++){
+            for (int index = 0; index <= 10000; index++){
                 String arg[] = new String[100000];
             }
-            mHandler.sendEmptyMessageDelayed(0,30);
+            mHandler.sendEmptyMessageDelayed(0,3);
         }
     };
 

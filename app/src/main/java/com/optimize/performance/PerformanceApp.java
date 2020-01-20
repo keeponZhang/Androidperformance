@@ -36,6 +36,7 @@ import com.optimize.performance.tasks.InitUmengTask;
 import com.optimize.performance.tasks.InitWeexTask;
 import com.optimize.performance.utils.LaunchTimer;
 import com.optimize.performance.utils.LogUtils;
+import com.taobao.android.dexposed.DexposedBridge;
 import com.taobao.android.dexposed.XC_MethodHook;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXSDKEngine;
@@ -131,13 +132,13 @@ public class PerformanceApp extends Application {
 
         LaunchTimer.endRecord("Oncreate finish task "+getProcessName()+" ");
         //
-        // DexposedBridge.hookAllConstructors(ImageView.class, new XC_MethodHook() {
-        //     @Override
-        //     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        //         super.afterHookedMethod(param);
-        //         DexposedBridge.findAndHookMethod(ImageView.class, "setImageBitmap", Bitmap.class, new ImageHook());
-        //     }
-        // });
+        DexposedBridge.hookAllConstructors(ImageView.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+                DexposedBridge.findAndHookMethod(ImageView.class, "setImageBitmap", Bitmap.class, new ImageHook());
+            }
+        });
 
 
 //        try {

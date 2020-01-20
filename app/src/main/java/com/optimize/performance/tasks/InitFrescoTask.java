@@ -1,5 +1,7 @@
 package com.optimize.performance.tasks;
 
+import android.os.SystemClock;
+
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.listener.RequestListener;
@@ -13,6 +15,7 @@ public class InitFrescoTask extends Task {
 
     @Override
     public void run() {
+        SystemClock.sleep(1000);
         Set<RequestListener> listenerset = new HashSet<>();
         listenerset.add(new FrescoTraceListener());
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(mContext).setRequestListeners(listenerset)
