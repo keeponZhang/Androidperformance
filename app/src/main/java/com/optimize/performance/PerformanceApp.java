@@ -84,9 +84,9 @@ public class PerformanceApp extends Application {
 
     private int mCrashTimes;
 
-    // @Override
-    // protected void attachBaseContext(Context base) {
-    //     super.attachBaseContext(base);
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
     //
     //     if(mCrashTimes > 3){
     //         // 删除文件，恢复到重新安装的状态
@@ -98,20 +98,8 @@ public class PerformanceApp extends Application {
     //
     //     LaunchTimer.startRecord();
     //     MultiDex.install(this);
-    //     // try {
-    //     //     DexposedBridge.hookAllConstructors(Thread.class, new XC_MethodHook() {
-    //     //         @Override
-    //     //         protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-    //     //             super.afterHookedMethod(param);
-    //     //             Thread thread = (Thread) param.thisObject;
-    //     //             LogUtils.i(thread.getName()+" stack "+Log.getStackTraceString(new Throwable()));
-    //     //         }
-    //     //     });
-    //     // }catch (Exception e){
-    //     //     e.printStackTrace();
-    //     // }
-    //
-    // }
+
+    }
 
     @Override
     public void onCreate() {
@@ -128,7 +116,19 @@ public class PerformanceApp extends Application {
 
         startTask();
 
-
+        //hook 线程创建
+        try {
+            DexposedBridge.hookAllConstructors(Thread.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+                    Thread thread = (Thread) param.thisObject;
+                    LogUtils.i(thread.getName()+" Thread stack "+Log.getStackTraceString(new Throwable()));
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         LaunchTimer.endRecord("Oncreate finish task "+getProcessName()+" ");
         //
@@ -157,7 +157,7 @@ public class PerformanceApp extends Application {
        //     e.printStackTrace();
        // }
 
-       BlockCanary.install(this, new AppBlockCanaryContext()).start();
+       // BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         // initStrictMode();
        new ANRWatchDog().start();
