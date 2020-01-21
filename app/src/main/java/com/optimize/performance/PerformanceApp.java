@@ -139,30 +139,32 @@ public class PerformanceApp extends Application {
                 DexposedBridge.findAndHookMethod(ImageView.class, "setImageBitmap", Bitmap.class, new ImageHook());
             }
         });
+        initStrictMode();
 
 
-//        try {
-//            DexposedBridge.findAndHookMethod(Class.forName("android.os.BinderProxy"), "transact",
-//                    int.class, Parcel.class, Parcel.class, int.class, new XC_MethodHook() {
-//                        @Override
-//                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-//                            LogUtils.i( "BinderProxy beforeHookedMethod " + param.thisObject.getClass().getSimpleName()
-//                                    + "\n" + Log.getStackTraceString(new Throwable()));
-//                            super.beforeHookedMethod(param);
-//                        }
-//                    });
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        //捕获ipc操作
+       // try {
+       //     DexposedBridge.findAndHookMethod(Class.forName("android.os.BinderProxy"), "transact",
+       //             int.class, Parcel.class, Parcel.class, int.class, new XC_MethodHook() {
+       //                 @Override
+       //                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+       //                     LogUtils.i( "BinderProxy beforeHookedMethod " + param.thisObject.getClass().getSimpleName()
+       //                             + "\n" + Log.getStackTraceString(new Throwable()));
+       //                     super.beforeHookedMethod(param);
+       //                 }
+       //             });
+       // } catch (ClassNotFoundException e) {
+       //     e.printStackTrace();
+       // }
 
-//        BlockCanary.install(this, new AppBlockCanaryContext()).start();
+       BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
         // initStrictMode();
-//        new ANRWatchDog().start();
+       new ANRWatchDog().start();
     }
 
     private void startTask() {
-        if(true){
+        if(false){
             TaskDispatcher.init(PerformanceApp.this);
             TaskDispatcher dispatcher = TaskDispatcher.createInstance();
             dispatcher.addTask(new InitAMapTask())

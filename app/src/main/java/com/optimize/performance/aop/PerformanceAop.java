@@ -16,7 +16,7 @@ import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
 public class PerformanceAop {
-    @Around("call(* com.optimize.performance.PerformanceApp.initFresco(..))")
+    @Around("execution(* com.optimize.performance.PerformanceApp.initFresco(..))")
     public void getTime(ProceedingJoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         String name = signature.toShortString();
@@ -26,7 +26,7 @@ public class PerformanceAop {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        // LogUtils.i(name + "PerformanceAop getTime cost " + (System.currentTimeMillis() - time));
+        LogUtils.i(name + "PerformanceAop getTime cost " + (System.currentTimeMillis() - time));
     }
 
     // @Pointcut("@annotation(com.optimize.performance.aop.BehaviorTrace)")
@@ -69,7 +69,7 @@ public class PerformanceAop {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        // LogUtils.i(name + " cost " + (System.currentTimeMillis() - time));
+        LogUtils.i(name + "PerformanceAop getSetContentViewTimecost " + (System.currentTimeMillis() - time));
     }
 
 

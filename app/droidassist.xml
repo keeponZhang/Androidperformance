@@ -1,0 +1,8 @@
+<DroidAssist>
+    <Enhance>
+        <ReparentClass>
+            <Source>android.os.Handler</Source>
+            <Target>com.optimize.performance.handler.SuperHandler</Target>
+        </ReparentClass>
+    </Enhance>
+</DroidAssist>

@@ -55,6 +55,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//X2C 需要注解
 @Xml(layouts = "activity_main")
 public class MainActivity extends AppCompatActivity implements OnFeedShowCallBack {
 
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements OnFeedShowCallBac
 
         // 以下代码是为了演示业务不正常场景下的监控
         try {
+            Thread.sleep(2000);
             // 一些业务处理
             Log.i("", "");
         } catch (Exception e) {
@@ -194,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements OnFeedShowCallBac
                 } else {
                     ++mFrameCount;
                 }
+                // Log.e("TAG", "MainActivity doFrame frameTimeNanos:"+frameTimeNanos);
 
                 Choreographer.getInstance().postFrameCallback(this);
             }

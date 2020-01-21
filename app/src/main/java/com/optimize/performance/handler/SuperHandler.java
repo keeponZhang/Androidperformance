@@ -32,6 +32,7 @@ public class SuperHandler extends Handler {
     @Override
     public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
         boolean send = super.sendMessageAtTime(msg, uptimeMillis);
+        Log.e("TAG", "SuperHandler Msg sendMessageAtTime:");
         if (send) {
             GetDetailHandlerHelper.getMsgDetail().put(msg, Log.getStackTraceString(new Throwable()).replace("java.lang.Throwable", ""));
         }
@@ -42,7 +43,7 @@ public class SuperHandler extends Handler {
     public void dispatchMessage(Message msg) {
         mStartTime = System.currentTimeMillis();
         super.dispatchMessage(msg);
-
+        Log.e("TAG", "SuperHandler dispatchMessage:");
         if (GetDetailHandlerHelper.getMsgDetail().containsKey(msg)
                 && Looper.myLooper() == Looper.getMainLooper()) {
             JSONObject jsonObject = new JSONObject();
@@ -50,7 +51,7 @@ public class SuperHandler extends Handler {
                 jsonObject.put("Msg_Cost", System.currentTimeMillis() - mStartTime);
                 jsonObject.put("MsgTrace", msg.getTarget() + " " + GetDetailHandlerHelper.getMsgDetail().get(msg));
 
-                LogUtils.i("MsgDetail " + jsonObject.toString());
+                LogUtils.i("SuperHandler Msg MsgDetail " + jsonObject.toString());
                 GetDetailHandlerHelper.getMsgDetail().remove(msg);
             } catch (Exception e) {
             }
