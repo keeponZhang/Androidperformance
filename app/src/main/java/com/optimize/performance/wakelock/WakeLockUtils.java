@@ -13,6 +13,8 @@ public class WakeLockUtils {
             sWakeLock = createWakeLock(context);
         }
         if(sWakeLock != null && !sWakeLock.isHeld()){
+            // 如果我们调用的是acquire(long timeout)那么就无需我们自己手动调用release()来释放锁，系统会帮助我们在timeout时间后释放。
+            // 如果我们调用的是acquire()那么就需要我们自己手动调用release()来释放锁。
             sWakeLock.acquire();
             sWakeLock.acquire(1000);
         }

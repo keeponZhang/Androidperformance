@@ -3,15 +3,20 @@ package com.optimize.performance;
 import android.annotation.TargetApi;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
+import android.app.usage.NetworkStats;
+import android.app.usage.NetworkStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.NetworkCapabilities;
+import android.net.TrafficStats;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.AsyncLayoutInflater;
@@ -19,6 +24,7 @@ import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -133,6 +139,17 @@ public class MainActivity extends AppCompatActivity implements OnFeedShowCallBac
 
         setTheme(R.style.AppTheme);
 
+        String abi = "";
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+            abi = Build.CPU_ABI;
+        }else{
+            abi = Build.SUPPORTED_ABIS[0];
+        }
+        if(TextUtils.equals(abi,"ARMv7")){
+            //加载特定平台的so
+        }else{
+            //正常加载
+        }
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
         X2C.setContentView(MainActivity.this, R.layout.activity_main);
@@ -146,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements OnFeedShowCallBac
         getNews();
         getFPS();
 
+        TrafficStats.getMobileTxBytes();
 
         // 以下代码是为了演示业务不正常场景下的监控
         try {
@@ -171,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements OnFeedShowCallBac
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
             JobInfo.Builder builder = new JobInfo.Builder(1, new ComponentName(getPackageName(), JobSchedulerService.class.getName()));
+            //用户在充电
             builder.setRequiresCharging(true)
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
             jobScheduler.schedule(builder.build());
@@ -243,6 +262,39 @@ public class MainActivity extends AppCompatActivity implements OnFeedShowCallBac
         super.onPause();
         // 以下代码是为了演示电量优化中对动画的处理
 //        alphaAnimation.cancel();
+    }
+
+
+    public void getNetStatus(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            long netDataRx = 0;
+            long netDataTx = 0;
+           TelephonyManager telephonyManager =
+                   (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String subscriberId = telephonyManager.getSubscriberId();
+            NetworkStatsManager manager =
+                    (NetworkStatsManager) getSystemService(Context.NETWORK_STATS_SERVICE);
+            NetworkStats networkStats = null;
+            NetworkStats.Bucket bucket = new NetworkStats.Bucket();
+            try {
+                networkStats = manager.querySummary(NetworkCapabilities.TRANSPORT_WIFI,
+                        subscriberId, 0, System.currentTimeMillis());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            while (networkStats!=null&&networkStats.hasNextBucket()){
+                networkStats.getNextBucket(bucket);
+                int uid = bucket.getUid();
+                if(getUidByPackageName() == uid){
+                    netDataRx+= bucket.getRxBytes();
+                    netDataTx+= bucket.getTxBytes();
+                }
+            }
+        }
+    }
+
+    private int getUidByPackageName() {
+        return 0;
     }
 
     @Override
